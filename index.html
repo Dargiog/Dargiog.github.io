@@ -115,10 +115,22 @@
   </div>
 </div>
 
-<div class="spotify">
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5ZmkKKcxj1H6jiFhq21eHI?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<div class="spotify" id="spotifyContainer"></div>
 
 <script>
+  // Array of Spotify iframes
+  const spotifyTracks = [
+    '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5ZmkKKcxj1H6jiFhq21eHI?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+    '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5yTVDnWloWcn2bKSxJBk7k?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+    '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0nXNsOS6gKYKS6pdoTBeHR?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>'
+  ];
+
+  // Randomly select and insert one Spotify iframe
+  const spotifyContainer = document.getElementById('spotifyContainer');
+  const randomTrack = spotifyTracks[Math.floor(Math.random() * spotifyTracks.length)];
+  spotifyContainer.innerHTML = randomTrack;
+
+  // Particle animation code
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
 
