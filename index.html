@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dargiog</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #000000, #0d0d0d, #1a1a1a, #0d0d0d, #000000);
+      background-size: 200% 200%;
+      animation: pulseAnimation 15s ease infinite;
+      font-family: 'Arial', sans-serif;
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    @keyframes pulseAnimation {
+      0% { background-position: 50% 50%; }
+      25% { background-position: 0% 50%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 100% 50%; }
+      100% { background-position: 50% 50%; }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 80px;
+    }
+
+    h1 {
+      font-size: 3em;
+      letter-spacing: 2px;
+    }
+
+    .links {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 70px;
+      height: 70px;
+      background-color: #1f1f1f;
+      border-radius: 50%;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .links a:hover {
+      background-color: #333333;
+      transform: scale(1.1);
+    }
+
+    .links img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .spotify {
+      z-index: 1;
+      margin-bottom: 20px;
+    }
+
+    iframe {
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="content">
+  <h1>Дарги</h1>
+
+  <div class="links">
+    <a href="https://modrinth.com/user/Dargiog" target="_blank">
+      <img src="https://img.icons8.com/nolan/64/modrinth.png" alt="Modrinth">
+    </a>
+    <a href="https://steamcommunity.com/id/Dargiog/" target="_blank">
+      <img src="https://img.icons8.com/fluency/48/steam.png" alt="Steam">
+    </a>
+    <a href="https://t.me/logovogruzinskovoshulera" target="_blank">
+      <img src="https://img.icons8.com/fluency/48/telegram-app.png" alt="Telegram">
+    </a>
+    <a href="" target="_blank">
+      <img src="https://img.icons8.com/fluency/48/discord-logo.png" alt="Discord">
+    </a>
+  </div>
+</div>
+
+<div class="spotify" id="spotifyContainer"></div>
+
+<script>
+  const spotifyTracks = [
+  '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7Kqv6GGgCQ6k49lnWdKJnU?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+  '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5ZmkKKcxj1H6jiFhq21eHI?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+  '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5yTVDnWloWcn2bKSxJBk7k?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+  '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4SUpPTdkAOoklM62WgkZCg?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+  '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0WOirSTp64ARKNQdGl1qax?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+  '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/6qH13nFm1WP3sFA4Z6YMkE?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+  '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2xHAfX9jiM10OEVYg3ChOE?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+  '<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7eDfh04wqTO5zdbScjufkE?utm_source=generator&theme=0" width="50%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>'
+];
+
+  const spotifyContainer = document.getElementById('spotifyContainer');
+  const randomTrack = spotifyTracks[Math.floor(Math.random() * spotifyTracks.length)];
+  spotifyContainer.innerHTML = randomTrack;
+
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+
+  let particlesArray;
+
+  function initParticles() {
+    particlesArray = [];
+    const numberOfParticles = 70;
+    for (let i = 0; i < numberOfParticles; i++) {
+      let size = Math.random() * 2 + 1;
+      let x = Math.random() * window.innerWidth;
+      let y = Math.random() * window.innerHeight;
+      let directionX = (Math.random() - 0.5) * 0.5;
+      let directionY = (Math.random() - 0.5) * 0.5;
+      let color = "#222222";
+      particlesArray.push({x, y, directionX, directionY, size, color});
+    }
+  }
+
+  function animateParticles() {
+    requestAnimationFrame(animateParticles);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+    for (let i = 0; i < particlesArray.length; i++) {
+      let p = particlesArray[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+
+      p.x += p.directionX;
+      p.y += p.directionY;
+
+      if (p.x + p.size > innerWidth || p.x - p.size < 0) {
+        p.directionX = -p.directionX;
+      }
+      if (p.y + p.size > innerHeight || p.y - p.size < 0) {
+        p.directionY = -p.directionY;
+      }
+    }
+  }
+
+  window.addEventListener('resize', () => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    initParticles();
+  });
+
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  initParticles();
+  animateParticles();
+</script>
+
+</body>
+</html>
